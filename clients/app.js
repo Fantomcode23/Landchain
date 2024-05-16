@@ -22,4 +22,16 @@ app.get('/',async (req,res)=>{
 app.get('/ownerdetails',(req,res)=>{
     res.render('listings/ownerdetails.ejs');
 });
+app.get('/userdetails',(req,res)=>{
+    res.render('listings/userdetails.ejs');
+});
+app.post('/gotownerdetails',(req,res)=>{
+    let ownerdetails=req.body;
+    res.send({ownerdetails});
+});
+app.post('/gotuserdetails',(req,res)=>{
+    let userdetails=req.body;
+    
+    res.render('listings/buyer.ejs',{userdetails});
+});
 const ethers=require('ethers');
