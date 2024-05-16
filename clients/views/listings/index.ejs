@@ -14,6 +14,32 @@
              <button class="mbtn2 mt-4">Cards</button>
            </div>
          </div>
+         <button class="mbtn2 w-50 mt-8" style="background-color: #f6851b; color:beige;" id="connect-wallet-btn">Connect Wallet</button>
         </div>
        </section>
+       <script src="https://cdn.ethers.io/lib/ethers-5.0.umd.min.js"></script>
+       <script>
+        document.getElementById('connect-wallet-btn').addEventListener('click', async () => {
+            try {
+                if (window.ethereum) {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    const signer = provider.getSigner();
+                    const walletAddress = await signer.getAddress();
+                    const response = await fetch('/connect-wallet', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ walletAddress })
+                    });
+                    const data = await response.json();
+                    console.log(data.message);
+                    alert("Wallet Connected")
+                } else {
+                    console.error('MetaMask is not installed');
+                }
+            } catch (error) {
+                console.error('Error connecting wallet:', error);
+            }
+        });
+    </script>
 </body>

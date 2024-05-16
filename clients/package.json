@@ -13,7 +13,7 @@
     "ejs": "^3.1.10",
     "ejs-mate": "^4.0.0",
     "engine": "^1.0.0",
-    "ethers": "^6.12.1",
+    "ethers": "^5.7.2",
     "express": "^4.19.2",
     "method-override": "^3.0.0",
     "nodemon": "^3.1.0",
