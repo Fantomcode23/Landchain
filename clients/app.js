@@ -17,7 +17,7 @@ app.listen(port,()=>{
 
 app.get('/',async (req,res)=>{
     
-    res.render('listings/index.ejs');
+    res.render('listings/govtauthdetails.ejs');
 });
 app.get('/ownerdetails',(req,res)=>{
     res.render('listings/ownerdetails.ejs');
@@ -31,7 +31,6 @@ app.post('/gotownerdetails',(req,res)=>{
 });
 app.post('/gotuserdetails',(req,res)=>{
     let userdetails=req.body;
-    
     res.render('listings/buyer.ejs',{userdetails});
 });
 const ethers=require('ethers');
