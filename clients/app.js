@@ -27,10 +27,16 @@ app.get('/userdetails',(req,res)=>{
 });
 app.post('/gotownerdetails',(req,res)=>{
     let ownerdetails=req.body;
-    res.send({ownerdetails});
+    res.render('listings/owner.ejs',{ownerdetails});
 });
 app.post('/gotuserdetails',(req,res)=>{
     let userdetails=req.body;
     res.render('listings/buyer.ejs',{userdetails});
+});
+app.get('/owner/32',(req,res)=>{
+    res.render('listings/showpropowner.ejs');
+})
+app.get("/user/64",(req,res)=>{
+    res.render('listings/showpropuser.ejs');
 });
 const ethers=require('ethers');

@@ -141,16 +141,17 @@ a{
     font-size: 0.9em;
     border-radius: 20px;
   }
-  .editcart{
+  .plussymbol{
     font-size: 2.3rem;
     margin-left: 19.3rem;
     position: relative; 
     top: -39px;
     cursor: pointer;
 }
- .editcart:hover{
-    color: rgb(20, 219, 20);
- }
+.plussymbol:hover {
+   font-size: 2.5rem;
+}
+
  .head1{
     font-weight: 400;
     font-size: 2rem;
@@ -161,4 +162,32 @@ a{
     color: rgb(148, 145, 145);
     margin-left: 1rem;
     font-size: 1.1rem;
+}
+
+
+/* showprop.ejs */
+.show-image{
+    height: 96% !important;
+    width: 100% !important;
+    border-radius: 20px;
+    position: relative;
+    margin-top: 11px;
+}
+.btns
+{
+    display: flex;
+}
+
+
+.show-card{
+    height: 26rem !important;
+    width: 48rem !important;
+    margin: 0px 16.5em;
+    box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+    font-size: 0.9em;
+    border-radius: 20px;
+}
+.showcard-body{
+    position: relative;
+    margin-top: 50px;
 }
