@@ -191,3 +191,12 @@ a{
     position: relative;
     margin-top: 50px;
 }
+
+
+
+/* verifybygovt ejs */
+.approvebutton{
+     width: 20px;
+     border-radius: 50%;
+     height: 20px;
+}
