@@ -1,0 +1,38 @@
+<%layout('./layouts/boilerplate')%>
+<body>
+    <div class="row mt-3">
+        <h2 class="col-6 offset-1 mb-4">Land Registration Details:</h2>
+        <div class="col-6 offset-3">
+            <form action="/login" method="POST"  class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="username" class="form-label">Unit Id</label>
+                <input type="text" name="username" placeholder="enter the username" class="form-control" id="username" required>
+                <div class="invalid-feedback">
+                    Enter a valid Id
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Unit Area</label>
+                <input type="password" name="password" placeholder="enter password" class="form-control" id="password" required>
+                <div class="invalid-feedback">
+                    Enter a valid Area
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Unit Area</label>
+                <input type="password" name="password" placeholder="enter password" class="form-control" id="password" required>
+                <div class="invalid-feedback">
+                    Enter a valid Area
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Land Address</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <div class="invalid-feedback">
+                    Enter a valid Address
+                </div>
+            </div>
+            <button class="btn btn-success">Login</button>
+            </form>
+        </div>
+</body>

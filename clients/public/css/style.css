@@ -1,0 +1,49 @@
+*{
+    font-family: "Poppins", sans-serif;
+}
+
+/* Navbar */
+.navbar{
+    background-color: white !important;
+    height: 5rem !important;
+}
+.nav-link{
+    font-size: 18px !important;
+    font-weight: 500;
+}
+.disab{
+    margin-left: auto !important;
+}
+.navmiddle{
+    margin-right: 31rem !important;
+}
+.cenpart{
+    margin-right: 5rem;
+}
+
+
+
+
+
+/*index.js page  */
+
+/* main section */
+.main{
+    /* background: url('') no-repeat !important; */
+    background-color: black;
+    background-size: cover !important;
+    height: 550px;
+    width: 100%;
+    z-index: 0 !important;
+}
+.whtcolor{
+    color: white !important;
+}
+.homeimage{
+    height: 280px;
+    width: 308px;
+    position: absolute;
+    top: 242px;
+    right: 188px;
+    border-radius: 50%;
+}
