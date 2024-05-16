@@ -1,164 +1,185 @@
-*{
-    font-family: "Poppins", sans-serif;
+* {
+  font-family: 'Poppins', sans-serif;
 }
-a{
-    text-decoration: none;
+a {
+  text-decoration: none;
 }
 
 /* Navbar */
-.navbar{
-    background-color: white !important;
-    height: 5rem !important;
+.navbar {
+  background-color: white !important;
+  height: 5rem !important;
 }
-.nav-link{
-    font-size: 18px !important;
-    font-weight: 500;
+.nav-link {
+  font-size: 18px !important;
+  font-weight: 500;
 }
-.disab{
-    margin-left: auto !important;
+.disab {
+  margin-left: auto !important;
 }
-.navmiddle{
-    margin-right: 31rem !important;
+.navmiddle {
+  margin-right: 31rem !important;
 }
-.cenpart{
-    margin-right: 5rem;
+.cenpart {
+  margin-right: 5rem;
 }
-
-
-
-
 
 /*index.js page  */
 
 /* main section */
 .main {
-    background-color: black; /* Set background color */
-    background-image: url('https://res.cloudinary.com/dzbw89xnj/image/upload/v1715846527/Rectangle_1_hajrpf.png'); /* Set background image */
-    background-repeat: no-repeat; /* Do not repeat background image */
-    background-size: 35%; /* Cover the entire container */
-    height: 550px;
-    width: 100%;
-    z-index: 0;
-    display: block;
-    background-position: 285px 118px; /* Move background image 50 pixels to the right */
+  background-color: black; /* Set background color */
+  background-image: url('https://res.cloudinary.com/dzbw89xnj/image/upload/v1715846527/Rectangle_1_hajrpf.png'); /* Set background image */
+  background-repeat: no-repeat; /* Do not repeat background image */
+  background-size: 35%; /* Cover the entire container */
+  height: 550px;
+  width: 100%;
+  z-index: 0;
+  display: block;
+  background-position: 285px 118px; /* Move background image 50 pixels to the right */
 }
-.mbtn1{
-   background-color: white;
-   color: black;
-   outline: none;
-   border: none;
-   border-radius: 10px;
-   height: 40px;
-   width: 108px;
-   font-weight: 500;
+.mbtn1 {
+  background-color: white;
+  color: black;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  height: 40px;
+  width: 108px;
+  font-weight: 500;
 }
-.mbtn2{
-    background-color: white;
-    color: black;
-    outline: none;
-    border: none;
-    border-radius: 10px;
-    height: 40px;
-    width: 108px;
-    font-weight: 500;
- }
- .mbtn1:hover{
-    color: white;
-    background-color: transparent;
+.mbtn2 {
+  background-color: white;
+  color: black;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  height: 40px;
+  width: 108px;
+  font-weight: 500;
 }
-
-.mbtn2:hover{
-    color: white;
-    background-color: transparent;
+.mbtn1:hover {
+  color: white;
+  background-color: transparent;
 }
 
-.whtcolor{
-    color: white !important;
-}
-.homeimage{
-    height: 280px;
-    width: 308px;
-    position: absolute;
-    top: 242px;
-    right: 188px;
-    border-radius: 50%;
+.mbtn2:hover {
+  color: white;
+  background-color: transparent;
 }
 
+.whtcolor {
+  color: white !important;
+}
+.homeimage {
+  height: 280px;
+  width: 308px;
+  position: absolute;
+  top: 242px;
+  right: 188px;
+  border-radius: 50%;
+}
 
 /* buyer.ejs */
-.mainbuyer{
-    background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-    background-size: cover;
-    width: 100%;
-    height: 700px;
+.mainbuyer {
+  background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-size: cover;
+  width: 100%;
+  height: 700px;
 }
-.usercircle{
-    height: 220px;
-    background-color: white;
-    display: block;
-    width: 219px;
-    position: absolute;
-    top: 676px;
-    left: 96px;
-    border-radius: 50%;
-    border: 1px solid black;
+.usercircle {
+  height: 220px;
+  background-color: white;
+  display: block;
+  width: 219px;
+  position: absolute;
+  top: 676px;
+  left: 96px;
+  border-radius: 50%;
+  border: 1px solid black;
 }
-.usercircle img{
-    position: absolute;
-    top: 53px;
-    left: 5px;
-    border-radius: 153px;
-    width: 208px;
-    height: 137px;
+.usercircle img {
+  position: absolute;
+  top: 53px;
+  left: 5px;
+  border-radius: 153px;
+  width: 208px;
+  height: 137px;
 }
-.buyerprintingdetails{
-    overflow: hidden;
-    position: relative;
-    top: 200px;
+.buyerprintingdetails {
+  overflow: hidden;
+  position: relative;
+  top: 200px;
 }
 
 .img-wrapper {
-    max-width: 100%;
-    height: 65vw;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-  }
- .img-wrapper img {
-    width: 100%;
-    height: 15rem;
-    border-radius: 20px 20px 0 0;
-  }
-  .carousel-item{
-    height: 22rem !important;
-    width: 25rem !important;
-  }
-  .card{
-    height: 22rem !important;
-    width:25rem!important;
-    margin: 0 0.5em;
-    box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
-    font-size: 0.9em;
-    border-radius: 20px;
-  }
-  .editcart{
-    font-size: 2.3rem;
-    margin-left: 19.3rem;
-    position: relative; 
-    top: -39px;
-    cursor: pointer;
+  max-width: 100%;
+  height: 65vw;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
- .editcart:hover{
-    color: rgb(20, 219, 20);
- }
- .head1{
-    font-weight: 400;
-    font-size: 2rem;
-    margin: 0;
-    margin-left: 0.8rem;
+.img-wrapper img {
+  width: 100%;
+  height: 15rem;
+  border-radius: 20px 20px 0 0;
 }
-.per1{
-    color: rgb(148, 145, 145);
-    margin-left: 1rem;
-    font-size: 1.1rem;
+.carousel-item {
+  height: 22rem !important;
+  width: 25rem !important;
+}
+.card {
+  height: 25rem !important;
+  width: 25rem !important;
+  margin: 0 0.5em;
+  box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+  font-size: 0.9em;
+  border-radius: 20px;
+}
+.plussymbol {
+  font-size: 2.3rem;
+  margin-left: 19.3rem;
+  position: relative;
+  top: -39px;
+  cursor: pointer;
+}
+.plussymbol:hover {
+  font-size: 2.5rem;
+}
+
+.head1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin: 0;
+  margin-left: 0.8rem;
+}
+.per1 {
+  color: rgb(148, 145, 145);
+  margin-left: 1rem;
+  font-size: 1.1rem;
+}
+
+/* showprop.ejs */
+.show-image {
+  height: 96% !important;
+  width: 100% !important;
+  border-radius: 20px;
+  position: relative;
+  margin-top: 11px;
+}
+.btns {
+  display: flex;
+}
+
+.show-card {
+  height: 26rem !important;
+  width: 48rem !important;
+  margin: 0px 16.5em;
+  box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+  font-size: 0.9em;
+  border-radius: 20px;
+}
+.showcard-body {
+  position: relative;
+  margin-top: 50px;
 }

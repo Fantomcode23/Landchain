@@ -62,13 +62,23 @@ app.get('/ownerdetails', (req, res) => {
 app.get('/userdetails', ensureWalletAddress, async (req, res) => {
   res.render('listings/userdetails.ejs')
 })
-app.get('/govtauth'),
-  (req, res) => {
-    res.render('listings/govtauthdetails.ejs')
-  }
+app.get('/govtauth', (req, res) => {
+  res.render('listings/govtauthdetails.ejs')
+})
 app.post('/gotownerdetails', async (req, res) => {
+  const wallet = new ethers.Wallet(privateKey, provider)
+  const signer = wallet.connect(provider)
+  const contractWithSigner = contract.connect(signer)
+
   let ownerdetails = req.body
-  const transaction = await contract.addLand(
+  console.log(
+    ownerdetails.unitarea,
+    ownerdetails.landaddress,
+    ownerdetails.landprice,
+    ownerdetails.propertyid,
+    ownerdetails.documentno
+  )
+  const transaction = await contractWithSigner.addLand(
     ownerdetails.unitarea,
     ownerdetails.landaddress,
     ownerdetails.landprice,
@@ -76,8 +86,29 @@ app.post('/gotownerdetails', async (req, res) => {
     ownerdetails.documentno
   )
   await transaction.wait()
-  res.json({ message: 'Land registered successfully!' })
-  alert('Land Registered Succesully')
+  console.log('Transaction done')
+  res.redirect('/owner')
+})
+
+app.get('/owner', async (req, res) => {
+  const landDetailsArray = []
+  const landIds = await contract.ReturnAllLandList()
+  for (let i = 0; i < landIds.length; i++) {
+    const landId = landIds[i]
+    const landDetails = await contract.lands(landId)
+
+    const id = landDetails.id.toNumber()
+    const area = landDetails.area.toNumber()
+    const landPrice = landDetails.landPrice.toNumber()
+    const landObject = {
+      id: id,
+      area: area,
+      landAddress: landDetails.landAddress,
+      landPrice: landPrice,
+    }
+    landDetailsArray.push(landObject)
+  }
+  res.render('listings/owner.ejs', { landDetailsArray })
 })
 app.post('/gotuserdetails', ensureWalletAddress, async (req, res) => {
   try {
@@ -107,45 +138,136 @@ app.post('/gotuserdetails', ensureWalletAddress, async (req, res) => {
       }
     )
     await transaction.wait()
-    res.json({ message: 'Buyer registered successfully!' })
+    res.redirect('/registeredUsers')
   } catch (error) {
     console.error(error)
   }
 })
 
 app.get('/registeredUsers', async (req, res) => {
-  const wallet = new ethers.Wallet(privateKey, provider)
-  const signer = wallet.connect(provider)
-  const contractWithSigner = contract.connect(signer)
-  const registeredUsers = await contractWithSigner.ReturnAllUserList()
-  console.log(registeredUsers)
-  res.render('listings/buyer.ejs', { registeredUsers })
+  try {
+    const wallet = new ethers.Wallet(privateKey, provider)
+    const landDetailsArray = []
+    const signer = wallet.connect(provider)
+    const contractWithSigner = contract.connect(signer)
+    const userDetails = await contractWithSigner.UserMapping(walletAddress)
+    if (!userDetails.id) {
+      return res.status(404).send('User not found')
+    }
+    const userObject = {
+      id: userDetails.id,
+      name: userDetails.name,
+      age: userDetails.age.toNumber(),
+      city: userDetails.city,
+      aadharNumber: userDetails.aadharNumber,
+      panNumber: userDetails.panNumber,
+      email: userDetails.email,
+    }
+
+    console.log(userObject)
+
+    const landIds = await contract.ReturnAllLandList()
+    for (let i = 0; i < landIds.length; i++) {
+      const landId = landIds[i]
+      const landDetails = await contract.lands(landId)
+
+      const id = landDetails.id.toNumber()
+      const area = landDetails.area.toNumber()
+      const landPrice = landDetails.landPrice.toNumber()
+      const landObject = {
+        id: id,
+        area: area,
+        landAddress: landDetails.landAddress,
+        landPrice: landPrice,
+      }
+      landDetailsArray.push(landObject)
+    }
+    res.render('listings/buyer.ejs', { landDetailsArray, userObject })
+  } catch (error) {
+    console.error(error)
+  }
 })
 
-app.post('/gotgovtauth', async (req, res) => {
+app.post('/gotgovtauth', ensureWalletAddress, async (req, res) => {
   try {
-    const { name, age, designation, city } = req.body
+    const { username, age, designation, city } = req.body
 
-    const address = walletAddress
-    const wallet = new ethers.Wallet(address, provider)
+    console.log(username, age, designation, city)
+
+    const wallet = new ethers.Wallet(privateKey, provider)
 
     const signer = wallet.connect(provider)
 
     const contractWithSigner = contract.connect(signer)
 
+    console.log(walletAddress)
+
     const transaction = await contractWithSigner.addGovtAuthority(
-      address,
-      name,
+      walletAddress,
+      username,
       age,
       designation,
       city
     )
     await transaction.wait()
-
-    res.json({ message: 'Government authority registered successfully!' })
-    alert('Govt authority registered')
+    res.render('listings/govtauthdetails.ejs')
   } catch (error) {
     console.error('Error registering government authority:', error)
     res.status(500).json({ error: 'Error registering government authority' })
   }
+})
+
+app.get('/', async (req, res) => {
+  res.render('listings/govtauthdetails.ejs')
+})
+app.get('/ownerdetails', (req, res) => {
+  res.render('listings/ownerdetails.ejs')
+})
+app.get('/userdetails', (req, res) => {
+  res.render('listings/userdetails.ejs')
+})
+app.post('/gotownerdetails', (req, res) => {
+  let ownerdetails = req.body
+  res.render('listings/owner.ejs', { ownerdetails })
+})
+app.post('/gotuserdetails', (req, res) => {
+  let userdetails = req.body
+  res.render('listings/buyer.ejs', { userdetails })
+})
+app.get('/owner/:id', async (req, res) => {
+  let { id } = req.params
+  const landDetails = []
+  const land = await contract.ReturnAllLandList()
+  const landId = land[id]
+  const lands = await contract.lands(landId)
+  const area = lands.area.toNumber()
+  const landPrice = lands.landPrice.toNumber()
+  const propertyid = lands.propertyPID.toNumber()
+  const address = lands.landAddress
+  const document = lands.document
+  landObj = {
+    area: area,
+    address: address,
+    landPrice: landPrice,
+    propertyid: propertyid,
+    document: document,
+  }
+  landDetails.push(landObj)
+  res.render('listings/showpropowner.ejs', { landDetails })
+})
+app.get('/buyer/:id', (req, res) => {
+  res.render('listings/showpropuser.ejs')
+})
+app.get('/addtosale/:id', async (req, res) => {
+  let { id } = req.params
+  const wallet = new ethers.Wallet(privateKey, provider)
+  const signer = wallet.connect(provider)
+  const contractWithSigner = contract.connect(signer)
+  const tx = await contractWithSigner.makeItforSell(id, {
+    gasLimit: 3000000,
+    gasPrice,
+  })
+  const receipt = await tx.wait()
+  console.log('Transaction receipt:', receipt)
+  res.send('Land added for sale successfully')
 })
