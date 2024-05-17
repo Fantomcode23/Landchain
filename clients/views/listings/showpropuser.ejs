@@ -8,12 +8,11 @@
                 <img src="https://media.istockphoto.com/id/909423306/photo/modern-multilevel-house-exterior-with-pool.webp?b=1&s=170667a&w=0&k=20&c=lVkUVRVlGBio7oMSYkx_tQuydlhJnBkpnVSuBBHtRMM=" class="card-img-top show-image" alt="show-image">
                 <div class="showcard-body ">
                     <p class="card-text">Owned by <i>Owner Name</i></p>
-                    <p class="card-text"><b>unit area</b></p>
-                    <p class="card-text">lanaddress</p>
-                    <p class="card-text"><b>Price</b> /night</p>
-                    <p class="card-text">Property id</p>
-                    <p class="card-text">Document No.</p> 
-                    <form method="POST" action="/listings/?_method=DELETE" style="display: contents;margin-bottom: 30rem !important;">
+                    <p class="card-text"><b>unit area: </b> <%= landDetails[0].area %></p>
+                    <p class="card-text"><b>land address: </b> <%= landDetails[0].address %> </p>
+                    <p class="card-text"><b>Price: </b><%= landDetails[0].landPrice %></p>
+                    <p class="card-text"><b>Property id: </b><%= landDetails[0].propertyid %> </p>
+                    <form method="GET" action="/request-for-buy/<%= landDetails[0].idland %>" style="display: contents;margin-bottom: 30rem !important;">
                         <button class="btn btn-dark deletebutton">Buy</button>
                     </form>  
                 </div>

@@ -13,7 +13,7 @@
                     <p class="card-text"><b>Price: </b><%= landDetails[0].landPrice %></p>
                     <p class="card-text"><b>Property id: </b><%= landDetails[0].propertyid %> </p>
                     <p class="card-text"><b>Document No: </b><%= landDetails[0].document %></p>  
-                    <form method="GET" action="/addtosale/<%= landDetails[0].propertyid %>" style="display: contents;">
+                    <form method="GET" action="/addtosale/<%= landDetails[0].idland %>" style="display: contents;">
                         <button class="btn btn-dark deletebutton mb-5">Sale</button>
                     </form> 
                 </div>

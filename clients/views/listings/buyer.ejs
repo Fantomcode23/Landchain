@@ -8,10 +8,14 @@
         </div>
     </section>
     <section class="buyerprintingdetails">
-        <div class="row">
+        <div class="row ml-5">
             <h2 class="offset-1 mb-3">Buyer Details:</h2>
-           <p class="ml-10"> </p>
-            </div>
+            <p class="card-text ml-3"><b>Name: </b><i><%= userObject.name %></i></p>
+            <p class="card-text"><b>age: </b> <%= userObject.age %></p>
+            <p class="card-text"><b>city: </b> <%= userObject.city %> </p>
+            <p class="card-text"><b>email: </b><%= userObject.email %> </p>
+            <p class="card-text"><b>Wallet Address: </b><%= userObject.id %></p>  
+        </div>
     </section>
     <section style="overflow: hidden !important;position: relative;margin-top: 20rem;">
         <h3 class="ms-5 mb-5">Lands For Sale:</h3>
@@ -34,4 +38,5 @@
                 <% }); %>
     </div>
     </section>
+    
 </body>

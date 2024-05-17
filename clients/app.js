@@ -92,6 +92,8 @@ app.post('/gotownerdetails', async (req, res) => {
 
 app.get('/owner', async (req, res) => {
   const landDetailsArray = []
+  const receivedRequests = []
+  const landSaleArray = []
   const landIds = await contract.ReturnAllLandList()
   for (let i = 0; i < landIds.length; i++) {
     const landId = landIds[i]
@@ -106,9 +108,39 @@ app.get('/owner', async (req, res) => {
       landAddress: landDetails.landAddress,
       landPrice: landPrice,
     }
+
+    if (landDetails.isforSell) {
+      landSaleArray.push(landObject)
+    }
     landDetailsArray.push(landObject)
   }
-  res.render('listings/owner.ejs', { landDetailsArray })
+  try {
+    const receivedRequestIds = await contract.myReceivedLandRequests()
+    for (let i = 0; i < receivedRequestIds.length; i++) {
+      const requestId = receivedRequestIds[i]
+      const request = await contract.LandRequestMapping(requestId)
+      const landDetails = await contract.lands(request.landId)
+      const id = requestId.toNumber()
+      const landId = request.landId.toNumber()
+      const landPrice = landDetails.landPrice.toNumber()
+
+      receivedRequests.push({
+        requestId: id,
+        landId: landId,
+        landAddress: landDetails.landAddress,
+        landPrice: landPrice,
+        buyerId: request.buyerId,
+      })
+    }
+  } catch (error) {
+    console.error('Error fetching buy requests:', error.message)
+    res.send('Error fetching buy requests')
+  }
+  res.render('listings/owner.ejs', {
+    landDetailsArray,
+    landSaleArray,
+    receivedRequests,
+  })
 })
 app.post('/gotuserdetails', ensureWalletAddress, async (req, res) => {
   try {
@@ -164,8 +196,6 @@ app.get('/registeredUsers', async (req, res) => {
       email: userDetails.email,
     }
 
-    console.log(userObject)
-
     const landIds = await contract.ReturnAllLandList()
     for (let i = 0; i < landIds.length; i++) {
       const landId = landIds[i]
@@ -182,7 +212,11 @@ app.get('/registeredUsers', async (req, res) => {
       }
       landDetailsArray.push(landObject)
     }
-    res.render('listings/buyer.ejs', { landDetailsArray, userObject })
+
+    res.render('listings/buyer.ejs', {
+      landDetailsArray,
+      userObject,
+    })
   } catch (error) {
     console.error(error)
   }
@@ -210,7 +244,7 @@ app.post('/gotgovtauth', ensureWalletAddress, async (req, res) => {
       city
     )
     await transaction.wait()
-    res.render('listings/govtauthdetails.ejs')
+    res.render('listings/verifybygovt.ejs')
   } catch (error) {
     console.error('Error registering government authority:', error)
     res.status(500).json({ error: 'Error registering government authority' })
@@ -238,7 +272,8 @@ app.get('/owner/:id', async (req, res) => {
   let { id } = req.params
   const landDetails = []
   const land = await contract.ReturnAllLandList()
-  const landId = land[id]
+  const landId = land[id - 1]
+  const idland = id
   const lands = await contract.lands(landId)
   const area = lands.area.toNumber()
   const landPrice = lands.landPrice.toNumber()
@@ -246,6 +281,7 @@ app.get('/owner/:id', async (req, res) => {
   const address = lands.landAddress
   const document = lands.document
   landObj = {
+    idland: idland,
     area: area,
     address: address,
     landPrice: landPrice,
@@ -255,8 +291,27 @@ app.get('/owner/:id', async (req, res) => {
   landDetails.push(landObj)
   res.render('listings/showpropowner.ejs', { landDetails })
 })
-app.get('/buyer/:id', (req, res) => {
-  res.render('listings/showpropuser.ejs')
+app.get('/buyer/:id', async (req, res) => {
+  let { id } = req.params
+  const landDetails = []
+  const land = await contract.ReturnAllLandList()
+  const landId = land[id - 1]
+  const idland = id
+  const lands = await contract.lands(landId)
+  const area = lands.area.toNumber()
+  const landPrice = lands.landPrice.toNumber()
+  const propertyid = lands.propertyPID.toNumber()
+  const address = lands.landAddress
+  const document = lands.document
+  landObj = {
+    idland: idland,
+    area: area,
+    address: address,
+    landPrice: landPrice,
+    propertyid: propertyid,
+  }
+  landDetails.push(landObj)
+  res.render('listings/showpropuser.ejs', { landDetails })
 })
 app.get('/addtosale/:id', async (req, res) => {
   let { id } = req.params
@@ -269,5 +324,216 @@ app.get('/addtosale/:id', async (req, res) => {
   })
   const receipt = await tx.wait()
   console.log('Transaction receipt:', receipt)
-  res.send('Land added for sale successfully')
+  res.redirect('/owner')
+})
+
+app.get('/request-for-buy/:id', async (req, res) => {
+  let { id } = req.params
+  console.log(id)
+  const wallet = new ethers.Wallet(privateKey, provider)
+  const signer = wallet.connect(provider)
+  const contractWithSigner = contract.connect(signer)
+
+  try {
+    const transaction = await contractWithSigner.requestforBuy(id, {
+      gasLimit: 300000,
+      gasPrice,
+    })
+    await transaction.wait()
+    res.redirect('/registeredUsers')
+  } catch (error) {
+    console.error('Error sending buy request:', error)
+    res.send('An error occurred while sending the buy request')
+  }
+})
+
+app.get('/', async (req, res) => {
+  res.render('listings/index.ejs')
+})
+app.get('/ownerdetails', (req, res) => {
+  res.render('listings/ownerdetails.ejs')
+})
+app.get('/userdetails', (req, res) => {
+  res.render('listings/userdetails.ejs')
+})
+app.post('/gotownerdetails', (req, res) => {
+  let ownerdetails = req.body
+  res.render('listings/owner.ejs', { ownerdetails })
+})
+app.post('/gotuserdetails', (req, res) => {
+  let userdetails = req.body
+  res.render('listings/buyer.ejs', { userdetails })
+})
+app.get('/verifybygovt', async (req, res) => {
+  const wallet = new ethers.Wallet(privateKey, provider)
+  const signer = wallet.connect(provider)
+  const contractWithSigner = contract.connect(signer)
+  const userCount = await contract.ReturnAllUserList()
+  const userAddresses = []
+  const landDetailsArray = []
+  for (let i = 0; i < userCount.length; i++) {
+    const user = await contract.UserMapping(userCount[i])
+    const isVerified = await contractWithSigner.isUserVerified(user.id)
+    const userObject = {
+      id: user.id,
+      name: user.name,
+      age: user.age.toNumber(),
+      city: user.city,
+      aadharNumber: user.aadharNumber,
+      panNumber: user.panNumber,
+      email: user.email,
+    }
+    if (!isVerified) {
+      userAddresses.push(userObject)
+    }
+  }
+  const landIds = await contract.ReturnAllLandList()
+  for (let i = 0; i < landIds.length; i++) {
+    const landId = landIds[i]
+    const landDetails = await contract.lands(landId)
+
+    const id = landDetails.id.toNumber()
+    const area = landDetails.area.toNumber()
+    const landPrice = landDetails.landPrice.toNumber()
+    const address = landDetails.landAddress
+    const propertyid = landDetails.propertyPID.toNumber()
+    const document = landDetails.document
+    const landObject = {
+      id: id,
+      area: area,
+      landAddress: landDetails.landAddress,
+      landPrice: landPrice,
+      propertyid: propertyid,
+      document: document,
+    }
+    const isVerified = await contractWithSigner.isLandVerified(id)
+    if (!isVerified) {
+      landDetailsArray.push(landObject)
+    }
+  }
+  const allLandRequests = await contractWithSigner.ReturnAllLandList()
+  const approvedRequests = []
+
+  for (let i = 0; i < allLandRequests.length; i++) {
+    const requestId = allLandRequests[i]
+    const request = await contractWithSigner.LandRequestMapping(requestId)
+    if (request.requestStatus === 1) {
+      const landDetails = await contractWithSigner.lands(request.landId)
+      const buyerDetails = await contractWithSigner.UserMapping(request.buyerId)
+
+      const requestObject = {
+        requestId: requestId.toNumber(),
+        landId: request.landId.toNumber(),
+        landAddress: landDetails.landAddress,
+        landPrice: landDetails.landPrice.toNumber(),
+        buyerId: buyerDetails.id,
+        buyerName: buyerDetails.name,
+        buyerEmail: buyerDetails.email,
+      }
+
+      approvedRequests.push(requestObject)
+    }
+  }
+  res.render('listings/verifybygovt.ejs', {
+    userAddresses,
+    landDetailsArray,
+    approvedRequests,
+  })
+})
+
+app.get('/verify-buyer/:id', async (req, res) => {
+  let { id } = req.params
+  try {
+    const wallet = new ethers.Wallet(privateKey, provider)
+    const signer = wallet.connect(provider)
+    const contractWithSigner = contract.connect(signer)
+    const transaction = await contractWithSigner.verifyUser(id, {
+      gasLimit: 100000,
+      gasPrice,
+    })
+    await transaction.wait()
+    console.log('Registration approved successfully!')
+    res.redirect('/verifybygovt')
+  } catch (error) {
+    console.error('Error approving registration:', error.message)
+  }
+})
+
+app.get('/verify-land/:id', async (req, res) => {
+  let { id } = req.params
+  try {
+    const wallet = new ethers.Wallet(privateKey, provider)
+    const signer = wallet.connect(provider)
+    const contractWithSigner = contract.connect(signer)
+    const transaction = await contractWithSigner.verifyLand(id)
+    await transaction.wait()
+    console.log('Registration approved successfully!')
+    res.redirect('/verifybygovt')
+  } catch (error) {
+    console.error('Error approving registration:', error.message)
+  }
+})
+
+app.get('/accept-buy-request/:requestId', async (req, res) => {
+  const { requestId } = req.params
+  try {
+    const wallet = new ethers.Wallet(privateKey, provider)
+    const signer = wallet.connect(provider)
+    const contractWithSigner = contract.connect(signer)
+    const transaction = await contractWithSigner.acceptRequest(requestId)
+    await transaction.wait()
+    console.log('Buy request accepted successfully!')
+    res.redirect('/owner')
+  } catch (error) {
+    console.error('Error accepting buy request:', error.message)
+  }
+})
+
+app.get('/reject-buy-request/:requestId', async (req, res) => {
+  const { requestId } = req.params
+  try {
+    const wallet = new ethers.Wallet(privateKey, provider)
+    const signer = wallet.connect(provider)
+    const contractWithSigner = contract.connect(signer)
+    const transaction = await contractWithSigner.rejectRequest(requestId)
+    await transaction.wait()
+    console.log('Buy request rejected successfully!')
+    res.redirect('/owner')
+  } catch (error) {
+    console.error('Error rejecting buy request:', error.message)
+  }
+})
+
+app.get('/make-payment/:requestId', async (req, res) => {
+  try {
+    const { requestId } = req.params
+    const wallet = new ethers.Wallet(privateKey, provider)
+    const signer = wallet.connect(provider)
+    const contractWithSigner = contract.connect(signer)
+
+    const transaction = await contractWithSigner.makePayment(requestId, {
+      value: ethers.utils.parseEther('0.1'),
+    })
+    await transaction.wait()
+    console.log('Payment made successfully!')
+    res.redirect('/registeredUsers')
+  } catch (error) {
+    console.error('Error making payment:', error.message)
+    res.send('Error making payment')
+  }
+})
+
+app.get('/process-transaction/:requestId', async (req, res) => {
+  try {
+    const { requestId } = req.params
+    const wallet = new ethers.Wallet(privateKey, provider)
+    const contractWithSigner = contract.connect(wallet)
+    console.log(requestId)
+    const tx = await contractWithSigner.transferOwnership(requestId)
+    await tx.wait()
+    res.redirect('/verifybygovt')
+  } catch (error) {
+    console.error(error)
+    res.send('Error processing transaction')
+  }
 })
