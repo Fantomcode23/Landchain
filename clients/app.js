@@ -41,5 +41,13 @@ app.get("/user/64",(req,res)=>{
 });
 app.get("/verifybygovt",(req,res)=>{
     res.render('listings/verifybygovt.ejs');
-})
-const ethers=require('ethers');
+});
+app.get("/connectbuyer",(req,res)=>{
+    res.render('listings/connectbuyer.ejs');
+});
+app.get("/connectowner",(req,res)=>{
+    res.render('listings/connectowner.ejs');
+});
+app.get("/connectgovtauth",(req,res)=>{
+    res.render('listings/connectgovtauth.ejs');
+});

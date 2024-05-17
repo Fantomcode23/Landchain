@@ -13,6 +13,7 @@ a{
 .nav-link{
     font-size: 18px !important;
     font-weight: 500;
+    margin-right: 2rem !important;
 }
 .disab{
     margin-left: auto !important;
@@ -83,6 +84,12 @@ a{
     right: 188px;
     border-radius: 50%;
 }
+.indexloginbutton{
+    position: relative;
+    left: 285px;
+}
+
+
 
 
 /* buyer.ejs */
@@ -199,4 +206,76 @@ a{
      width: 20px;
      border-radius: 50%;
      height: 20px;
+}
+
+
+/* footer.ejs */
+
+.footer {
+    background: black;
+    overflow: hidden;
+    color: white;
+    width: 100%;
+    position: relative; /* Change position to fixed */
+    bottom: 0;
+}
+
+.footer address{
+    font-size: 2rem;
+    color: white;
+}
+.orgaddress{
+    font-size: 20px;
+    color: white;
+}
+.socialmediacontents{
+    text-align: center;
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+.socialmediacontents h4{
+    font-weight: 700;
+    margin-top: 18px;
+}
+.socialmediacontents .line{
+    height: 6px;
+    width: 60%;
+    background: white;
+    margin-top: 1rem;
+    border-radius: 10px;
+    margin-left: 138px;
+}
+.socialmediaicons{
+    
+    margin: 10px 0 0 25px;
+}
+.socialmediaicons i{
+    font-size: 25px;
+    margin-right: 2rem;
+    cursor: pointer;
+}
+
+/* connect owner.ejs */
+.connecting-form{
+    height:350px;
+    width: 450px;
+    background-color: rgb(241, 241, 241);
+    position: relative;
+    top: 4rem;
+    left: 33rem;
+    padding: 2rem;
+
+}
+.connectwithmetamask{
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 34px;
+    height: 3rem;
+    width: 15rem;
+    margin-left: 65px;
+}
+.connectwithmetamask:hover{
+    box-shadow: 3px 2px rgb(169, 169, 169);
 }
