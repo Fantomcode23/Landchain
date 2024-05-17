@@ -537,3 +537,19 @@ app.get('/process-transaction/:requestId', async (req, res) => {
     res.send('Error processing transaction')
   }
 })
+
+app.get('/user/64', (req, res) => {
+  res.render('listings/showpropuser.ejs')
+})
+app.get('/verifybygovt', (req, res) => {
+  res.render('listings/verifybygovt.ejs')
+})
+app.get('/connectbuyer', (req, res) => {
+  res.render('listings/connectbuyer.ejs')
+})
+app.get('/connectowner', (req, res) => {
+  res.render('listings/connectowner.ejs')
+})
+app.get('/connectgovtauth', (req, res) => {
+  res.render('listings/connectgovtauth.ejs')
+})

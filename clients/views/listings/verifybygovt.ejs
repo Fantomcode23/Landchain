@@ -79,12 +79,12 @@
   </section>
   <section class="buyerprintingdetails">
     <div class="row ml-5">
-        <h2 class="offset-1 mb-3">Approved Sale Requests:</h2>
+        <h2 class="ms-4 mb-3">Approved Sale Requests:</h2>
         <% if (approvedRequests.length === 0) { %>
-            <p>No approved sale requests found.</p>
+            <p class="offset-1 mt-2">No approved sale requests found.</p>
         <% } else { %>
             <% approvedRequests.forEach(function(request) { %>
-                <div class="card mb-3">
+                <div class="card mb-3 offset-1">
                     <div class="card-body">
                         <h5 class="card-title">Land ID: <%= request.landId %></h5>
                         <p class="card-text">Land Address: <%= request.landAddress %></p>
@@ -93,7 +93,7 @@
                         <p class="card-text">Buyer Name: <%= request.buyerName %> </p>
                         <p class="card-text">Buyer Email: <%= request.buyerEmail %> </p>
                         <form action="/process-transaction/<%= request.requestId %>" method="GET">
-                        <button class="btn btn-dark">Hello</button>
+                        <button class="btn btn-dark">Done</button>
                     </form>
                     </div>
             <% }); %>
